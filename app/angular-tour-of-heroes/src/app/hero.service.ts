@@ -53,6 +53,26 @@ export class HeroService {
         );
     }
 
+    deleteHero(hero:Hero | number): Observable<Hero> {
+        const id = typeof  hero === 'number' ? hero : hero.id;
+        const url = `${this.heroesUrl}/delete/${id}`;
+
+        return this.http.delete<Hero>(url, httpOptions).pipe(
+            tap(_ => this.log(`delete hero = ${id}`)),
+            catchError(this.handleError<Hero>('deleteHero'))
+        );
+    }
+
+    searchHeroes(term: String): Observable<Hero[]> {
+        if(!term.trim()){
+            return of([]);
+        }
+        return this.http.get<Hero[]>(`${this.heroesUrl}/api/heroes?name=${term}`).pipe(
+            tap(_ => this.log(`found heroes matching "${term}"`)),
+            catchError(this.handleError<Hero[]>('search heroes', []))
+        )
+    }
+
     private log(message:string){
         this.messageService.add('HeroService: ' + message);
     }
