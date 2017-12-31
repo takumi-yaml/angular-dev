@@ -35,3 +35,9 @@ nbproject/private
 intermediate
 publish
 .idea
+
+mydb/*
+!mydb/git-keep
+
+.python-version
+*.db
